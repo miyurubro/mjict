@@ -13,17 +13,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
     currentSession = JSON.parse(sessionStr);
 
-    currentSession = JSON.parse(sessionStr);
-
-    // Sync student data from Firebase (Cloud Sync)
-    db.ref('users/' + currentSession.phone).on('value', (snapshot) => {
-        if (snapshot.exists()) {
-            const freshData = snapshot.val();
-            currentSession = { ...currentSession, ...freshData };
-            localStorage.setItem("mj_session", JSON.stringify(currentSession));
-            populateProfileData(); // Live refresh
-        }
-    });
+    // Sync missing data from usersDb (in case of updates)
+    if (currentSession.phone && usersDb[currentSession.phone]) {
+        currentSession = { ...currentSession, ...usersDb[currentSession.phone] };
+        localStorage.setItem("mj_session", JSON.stringify(currentSession));
+    }
 
     populateProfileData();
 
@@ -92,12 +86,10 @@ function populateProfileData() {
     document.getElementById('prof-institute').value = currentSession.institute || "";
     document.getElementById('prof-address').value = currentSession.address || "";
 
-    // Load saved photo from current session (which is synced with Firebase)
-    if (currentSession.photo) {
-        document.getElementById('db-photo').src = currentSession.photo;
-    } else {
-        const localPhoto = localStorage.getItem('mj_photo_' + currentSession.phone);
-        if (localPhoto) document.getElementById('db-photo').src = localPhoto;
+    // Load saved photo
+    const savedPhoto = localStorage.getItem('mj_photo_' + currentSession.phone);
+    if (savedPhoto) {
+        document.getElementById('db-photo').src = savedPhoto;
     }
 }
 
@@ -106,39 +98,33 @@ function saveProfileData() {
 
     const phone = currentSession.phone;
 
-    // Update object
-    const updatedData = {
-        name: document.getElementById('prof-name').value.trim(),
-        gender: document.getElementById('prof-gender').value,
-        grade: document.getElementById('prof-grade').value,
-        school: document.getElementById('prof-school').value.trim(),
-        institute: document.getElementById('prof-institute').value,
-        address: document.getElementById('prof-address').value.trim()
-    };
+    // Update memory
+    currentSession.name = document.getElementById('prof-name').value.trim();
+    currentSession.gender = document.getElementById('prof-gender').value;
+    currentSession.grade = document.getElementById('prof-grade').value;
+    currentSession.school = document.getElementById('prof-school').value.trim();
+    currentSession.institute = document.getElementById('prof-institute').value;
+    currentSession.address = document.getElementById('prof-address').value.trim();
 
-    // Save to Firebase (Cloud Sync)
-    db.ref('users/' + phone).update(updatedData).then(() => {
-        showToastMsg("Profile Details Synced to Cloud Successfully!");
-    }).catch(err => {
-        showToastMsg("Cloud Sync error: " + err.message);
-    });
+    // Save to users DB explicitly
+    if (usersDb[phone]) {
+        usersDb[phone] = { ...usersDb[phone], ...currentSession };
+        localStorage.setItem('mj_users', JSON.stringify(usersDb));
+        showToastMsg("Profile Updated Successfully!");
+    }
 }
 
 function updateProfilePhoto(event) {
     const file = event.target.files[0];
     if (!file) return;
+
     const reader = new FileReader();
     reader.onload = function (e) {
-        const dataUrl = e.target.result;
-        document.getElementById('db-photo').src = dataUrl;
-        
-        // Sync photo to Firebase
-        if (currentSession && currentSession.phone) {
-            db.ref('users/' + currentSession.phone).update({
-                photo: dataUrl
-            }).then(() => {
-                showToastMsg("Profile picture synced to cloud!");
-            });
+        const base64 = e.target.result;
+        document.getElementById('db-photo').src = base64;
+        if (currentSession) {
+            localStorage.setItem('mj_photo_' + currentSession.phone, base64);
+            showToastMsg("Photo Updated!");
         }
     };
     reader.readAsDataURL(file);

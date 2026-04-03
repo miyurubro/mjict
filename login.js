@@ -31,42 +31,35 @@ function sendOTP() {
     currentPhone = "0" + (phoneInput.startsWith("0") ? phoneInput.substring(1) : phoneInput);
     document.getElementById('display-phone').innerText = currentPhone;
     
-    // Check if user exists in Firebase
-    db.ref('users/' + currentPhone).once('value').then((snapshot) => {
-        isExistingUser = snapshot.exists();
-        
-        if (isExistingUser) {
-            const userData = snapshot.val();
-            // User exists -> Skip OTP and go directly to Password Login
-            document.getElementById('step-1').classList.remove('active');
-            document.getElementById('step-3').classList.add('active');
-            document.getElementById('step-desc').innerText = `Welcome back, ${userData.name}!`;
-            // Hide registration specific fields
-            document.getElementById('registration-fields').style.display = 'none';
-            document.getElementById('pwd-label').innerText = "Enter your password to sign in";
-            document.getElementById('final-btn').innerText = "Login to Dashboard";
-            setTimeout(() => document.getElementById('reg-password').focus(), 100);
-        } else {
-            // New User -> Generate Random OTP (for demo, we will show it in a toast)
-            expectedOTP = Math.floor(1000 + Math.random() * 9000).toString();
-            showToast(`[System Message] Your Demo OTP is: ${expectedOTP}`);
+    // Check if user exists
+    isExistingUser = !!usersDb[currentPhone];
+    
+    if (isExistingUser) {
+        // User exists -> Skip OTP and go directly to Password Login
+        document.getElementById('step-1').classList.remove('active');
+        document.getElementById('step-3').classList.add('active');
+        document.getElementById('step-desc').innerText = `Welcome back, ${usersDb[currentPhone].name}!`;
+        // Hide registration specific fields
+        document.getElementById('registration-fields').style.display = 'none';
+        document.getElementById('pwd-label').innerText = "Enter your password to sign in";
+        document.getElementById('final-btn').innerText = "Login to Dashboard";
+        setTimeout(() => document.getElementById('reg-password').focus(), 100);
+        return;  // End function here to prevent sending OTP
+    }
+    
+    // New User -> Generate Random OTP (for demo, we will show it in a toast)
+    expectedOTP = Math.floor(1000 + Math.random() * 9000).toString();
+    showToast(`[System Message] Your Demo OTP is: ${expectedOTP}`);
 
-            // UI Transition to OTP screen
-            document.getElementById('step-1').classList.remove('active');
-            document.getElementById('step-2').classList.add('active');
-            document.getElementById('step-desc').innerText = "OTP Verification";
-            
-            // Focus first OTP input
-            setTimeout(() => {
-                document.querySelector('.otp-input').focus();
-            }, 100);
-        }
-    }).catch(err => {
-        console.error("Firebase fetch error:", err);
-        // Fallback to local if Firebase fails or isn't configured yet
-        isExistingUser = !!usersDb[currentPhone];
-        // ... rest of fallback logic ...
-    });
+    // UI Transition to OTP screen
+    document.getElementById('step-1').classList.remove('active');
+    document.getElementById('step-2').classList.add('active');
+    document.getElementById('step-desc').innerText = "OTP Verification";
+    
+    // Focus first OTP input
+    setTimeout(() => {
+        document.querySelector('.otp-input').focus();
+    }, 100);
 }
 
 function resendOTP() {
@@ -155,15 +148,12 @@ function completeAuth() {
     }
 
     if (isExistingUser) {
-        // Login Flow from Firebase
-        db.ref('users/' + currentPhone).once('value').then((snapshot) => {
-            const userData = snapshot.val();
-            if (userData && userData.pass === password) {
-                loginSession(currentPhone, userData);
-            } else {
-                alert("Incorrect password! Try again.");
-            }
-        });
+        // Login Flow
+        if (usersDb[currentPhone].pass === password) {
+            loginSession(currentPhone, usersDb[currentPhone]);
+        } else {
+            alert("Incorrect password! Try again.");
+        }
     } else {
         // Registration Flow
         const name = document.getElementById('reg-name').value.trim();
@@ -178,18 +168,15 @@ function completeAuth() {
             name: name,
             grade: grade,
             pass: password,
-            email: currentPhone + "@student.mjict.com",
+            email: currentPhone + "@student.mjict.com", 
             phone: currentPhone,
             role: "student",
             approved: true
         };
         
-        // Save to Firebase
-        db.ref('users/' + currentPhone).set(newUser).then(() => {
-            loginSession(currentPhone, newUser);
-        }).catch(err => {
-            alert("Failed to save to cloud. Error: " + err.message);
-        });
+        usersDb[currentPhone] = newUser;
+        localStorage.setItem('mj_users', JSON.stringify(usersDb));
+        loginSession(currentPhone, newUser);
     }
 }
 
