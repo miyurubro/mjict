@@ -706,26 +706,22 @@
                                 </div>
 
                                 <!-- Side Panel for Question Grid -->
-                                <div class="exam-nav-sidebar"
-                                    style="background:#13141f; position:absolute; left:0; top:80px; bottom:0; padding:20px; overflow-y:auto; border-right:1px solid rgba(255,255,255,0.05); z-index:10;">
-                                    <h4
-                                        style="margin-bottom: 20px; font-size: 1.1rem; color: var(--neon-blue); text-align:center;">
+                                <div class="exam-nav-sidebar">
+                                    <h4 style="margin-bottom: 20px; font-size: 1.1rem; color: var(--neon-blue); text-align:center;">
                                         Question Navigator</h4>
                                     <div id="question-nav-grid" class="question-nav">
                                         <!-- Nav buttons injected here -->
                                     </div>
                                 </div>
 
-                                <div class="exam-content-area" style="margin-left:260px; padding:20px 0;">
+                                <div class="exam-content-area">
                                     <!-- Side Nav: Previous -->
                                     <button class="side-nav-arrow left-arrow" id="side-prev"
-                                        onclick="changeQuestion(-1)"
-                                        style="position:fixed; left: 260px; top:50%; transform:translateY(-50%); z-index:5;"><i
+                                        onclick="changeQuestion(-1)"><i
                                             class="fas fa-chevron-left"></i></button>
 
                                     <!-- Main Exam Card -->
-                                    <div class="exam-main-center"
-                                        style="max-width: 800px; margin: 0 auto; background: var(--bg-card); padding: 40px; border-radius: 12px;">
+                                    <div class="exam-main-center" style="max-width: 800px; margin: 0 auto; background: var(--bg-card); border-radius: 12px;">
                                         <form id="quiz-form" onsubmit="submitExam(event)">
                                             <div id="questions-container" class="paginated-questions">
                                                 <!-- Questions inject here -->
@@ -739,8 +735,7 @@
 
                                     <!-- Side Nav: Next -->
                                     <button class="side-nav-arrow right-arrow" id="side-next"
-                                        onclick="changeQuestion(1)"
-                                        style="position:fixed; right: 0; top:50%; transform:translateY(-50%); z-index:5;"><i
+                                        onclick="changeQuestion(1)"><i
                                             class="fas fa-chevron-right"></i></button>
                                 </div>
                             </div>
