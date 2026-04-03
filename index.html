@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MJ ICT</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+
+<body>
+
+    <!-- Header / Top Bar -->
+    <header id="header">
+        <div class="logo" style="cursor:pointer;" onclick="scrollToSection('home')">
+            <span class="m-blue">MJ</span> <span class="m-white">ICT</span>
+        </div>
+        <nav>
+            <ul id="nav-links">
+                <li><a href="#" onclick="scrollToSection('home')">Home</a></li>
+                <li><a href="#" onclick="scrollToSection('gallery')">Gallery</a></li>
+                <li><a href="#" onclick="scrollToSection('feedback')">Feedback</a></li>
+                <li><a href="#" onclick="scrollToSection('about')">About</a></li>
+                <li><a href="#" onclick="scrollToSection('contact')">Contact</a></li>
+                <li id="nav-login-btn"><a href="login.html" class="btn-primary">Login</a></li>
+                <li class="custom-lang-switcher notranslate" style="margin-left: 10px;">
+                    <div class="lang-tab-group">
+                        <button class="lang-tab-btn active lang-opt-en" onclick="changeLang('en')">English</button>
+                        <button class="lang-tab-btn lang-opt-si" onclick="changeLang('si')">Sinhala</button>
+                        <button class="lang-tab-btn lang-opt-ta" onclick="changeLang('ta')">Tamil</button>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+        <div class="mobile-menu" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+    </header>
+
+    <!-- Floating WhatsApp Icon -->
+    <a href="https://wa.me/94768895962" target="_blank" class="float-wa animate-pulse">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Gallery Lightbox -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <span class="lightbox-close">&times;</span>
+        <img id="lightbox-img" src="" alt="Gallery Image" onclick="event.stopPropagation()">
+    </div>
+
+    <!-- Main Content Area -->
+    <main id="app-content">
+        <!-- PUBLIC SCROLL VIEW -->
+        <div id="public-view" class="page-section active">
+
+            <!-- 1. Home Section (Fullscreen Dark) -->
+            <section id="home" class="scroll-section dark p-0">
+                <div class="hero animate-on-scroll">
+                    <!-- Animated Image Slider (Fullscreen) -->
+                    <div class="slider-container">
+                        <div class="slider" id="slider">
+                            <div class="slide"
+                                style="background-image: url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80')">
+                            </div>
+                            <div class="slide"
+                                style="background-image: url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80')">
+                            </div>
+                            <div class="slide"
+                                style="background-image: url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80')">
+                            </div>
+                            <div class="slide"
+                                style="background-image: url('https://images.unsplash.com/photo-1516116216624-53e697fedbea?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80')">
+                            </div>
+                            <div class="slide"
+                                style="background-image: url('https://images.unsplash.com/photo-1542831371-29b0f74f9713?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80')">
+                            </div>
+                            <div class="slide" style="background-image: url('img/back01.jpg')">
+                            </div>
+                            <div class="slide" style="background-image: url('img/back02.jpg')">
+                            </div>
+                            <div class="slide" style="background-image: url('img/back03.jpg')">
+                            </div>
+
+                        </div>
+                        <!-- Slider Overlay Content -->
+                        <div class="hero-overlay">
+                            <div class="hero-content animate-on-scroll delay-1">
+                                <h1>Welcome to <span class="highlight"> MJ ICT </span></h1>
+                                <p>Building the future with modern technology education.</p>
+                                <p>Grade 6/7/8/9/10/11 .</p>
+                                <p>GCE O/L & A/L .</p>
+                            </div>
+                        </div>
+                        <!-- Slider Controls -->
+                        <button class="slider-btn prev" onclick="moveSlide(-1)"><i
+                                class="fas fa-chevron-left"></i></button>
+                        <button class="slider-btn next" onclick="moveSlide(1)"><i
+                                class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Gallery Section (Light bg) -->
+            <section id="gallery" class="scroll-section light">
+                <div class="container animate-on-scroll">
+                    <h2 class="section-title">Class <span class="highlight">Gallery</span></h2>
+                    <div class="gallery-grid" id="gallery-grid">
+                        <!-- Images will be populated by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Feedback Section (Dark bg) -->
+            <section id="feedback" class="scroll-section dark">
+                <div class="container">
+                    <h2 class="section-title animate-on-scroll">Student <span class="highlight">Feedback</span></h2>
+                    <div class="feedback-slider-wrapper" style="position:relative; width: 100%;">
+                        <button class="slider-btn prev feedback-nav" onclick="moveFeedback(-1)"
+                            style="left: -20px; z-index:10;"><i class="fas fa-chevron-left"></i></button>
+                        <button class="slider-btn next feedback-nav" onclick="moveFeedback(1)"
+                            style="right: -20px; z-index:10;"><i class="fas fa-chevron-right"></i></button>
+                        <div class="feedback-grid" id="feedback-grid">
+                            <div class="feedback-card animate-on-scroll delay-1">
+                                <p>"මම පන්තියට සම්බන්ද උනෙ 10 වසරෙදි මැද වගෙ කාලයෙදි..... එ කාලෙනම් I.c.t. වලට කැමති
+                                    උනාට
+                                    අමාරුයි....
+                                    එත් මියුරු සර්ගෙ පන්තිය හම්බුනාට පස්සෙ එච්චර අමාරුවක් දැනුනෙ නැ මුලදි.... පාඩම හොදට
+                                    තෙරෙන විදිහට පැහැදිලි
+                                    කරලා දෙනවා. පාඩමට අමතර කරුනුද අපට කියා දෙනවා ජිවිතේට වැදගත් එවා ගොඩක්.... තෙරෙන්නෙ
+                                    නැති
+                                    තැනක්
+                                    තිබ්බොත් අයෙ අයේ හොදට තෙරෙනකම්ම කියා දෙනවා.... ඔන ප්‍රශ්නයක් උනත් ලගට ඇවිල්ලා කියා
+                                    දෙනවා.... අපට
+                                    පේපර්වල දන්නෙ නැති තැනක් තිබ්බොත් එවත් තෙරෙන විදිහට කෙටිම විදිහට කියා දෙනවා.. මම
+                                    දැන් 11
+                                    වසරෙ, සර්ගෙ
+                                    පන්තියත් එක්ක I.c.t. ලේසි විෂයක් .... සර් එක්ක හොද යාලුවො ටිකකුත් එක්ක හොදට වැඩ ටික
+                                    කරගෙන යනවා......"</p>
+                                <h4>- මල්ෂි හසාංගි - </h4>
+                            </div>
+                            <div class="feedback-card animate-on-scroll delay-2">
+                                <p>"O/l , A/L වලට විෂයක් විදිහට ICT ඉගෙන ගත්ත නැති මට දවස් තුනකින් මුළු විෂයම ආවරණය කරලා
+                                    මට B එකක් ගන්න ලැබුණේ අයියා නිසා. සුපිරියටම තේරෙනවා කියලා දෙන ඒවා. අයියගේ ඉදිරි
+                                    කටයුතු
+                                    සාර්ථක වෙන්න ඕනි.❤️😍"</p>
+                                <h4>- Ridmi Thathsaranee -</h4>
+                            </div>
+                            <div class="feedback-card animate-on-scroll delay-3">
+                                <p>"ඉතාමත් පැහැදිලිව හා කිසිදු දෝෂයකින් තොරව අපට උගන්වයි. පෙළපොතේ ඇති කරුනු ලෙහෙසියෙන්
+                                    අවබෝධ කර ගත හැකිවන පරිදි මැනවින් උගන්වන අතර අමතර කරුණු ද ලබා දෙයි. අපට අධ්‍යාපනය
+                                    මැනවින් ලබා දෙන මියුරු සර්ට ස්තූතිය ."</p>
+                                <h4>- G.D. නුවන්‍යා චතුමිණී -</h4>
+                            </div>
+                            <div class="feedback-card animate-on-scroll delay-3">
+                                <p>"A good , excellent and both funny class. Very happy to be able to join the
+                                    class.💖💫"
+                                </p>
+                                <h4>- K.G.Ovindi Shashiprabha -</h4>
+                            </div>
+                            <div class="feedback-card animate-on-scroll delay-3">
+                                <p>"සර් උගන්වනවා ගොඩක් හොදයි කියල දෙන දේවල් එක පාරින්ම නවා thanks sir "</p>
+                                <h4>- Maneesha -</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- 3.5 Top Achievers Section (Light bg) -->
+            <section id="achievers" class="scroll-section light">
+                <div class="container">
+                    <h2 class="section-title animate-on-scroll text-center">Top <span class="highlight">Achievers</span>
+                    </h2>
+
+                    <!-- Year Tabs -->
+                    <div class="year-tabs animate-on-scroll">
+                        <button class="year-tab active" onclick="showAchievers(2024)">2024</button>
+                        <button class="year-tab" onclick="showAchievers(2023)">2023</button>
+                        <button class="year-tab" onclick="showAchievers(2022)">2022</button>
+                    </div>
+
+                    <!-- 2024 Results -->
+                    <div id="achievers-2024" class="achievers-content active">
+                        <div class="results-grid">
+                            <div class="achiever-card animate-on-scroll delay-1">
+                                <img src="img/girl.jpg" alt="Student 1" class="achiever-img">
+                                <h4>Dinithi Amaduni</h4>
+                                <p class="school"> Kannangara M.M.V</p>
+                                <p class="index">Index: 40945227</p>
+                                <div class="result-badge">A</div>
+                            </div>
+                            <div class="achiever-card animate-on-scroll delay-2">
+                                <img src="img/girl.jpg" alt="Student 1" class="achiever-img">
+                                <h4>Tharushi Hansika</h4>
+                                <p class="school"> Kannangara M.M.V</p>
+                                <p class="index">Index: 40946142</p>
+                                <div class="result-badge">A</div>
+                            </div>
+                            <div class="achiever-card animate-on-scroll delay-3">
+                                <img src="img/girl.jpg" alt="Student 1" class="achiever-img">
+                                <h4>Owindi Shashibrabha</h4>
+                                <p class="school"> St. Meriys M.V</p>
+                                <p class="index">Index: 40954510</p>
+                                <div class="result-badge">A</div>
+                            </div>
+                            <div class="achiever-card animate-on-scroll delay-4">
+                                <img src="img/girl.jpg" alt="Student 1" class="achiever-img">
+                                <h4>Nethmi Nawanjana</h4>
+                                <p class="school">Mihidu M.M.V</p>
+                                <p class="index">Index: 40975967</p>
+                                <div class="result-badge">B</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2023 Results -->
+                    <div id="achievers-2023" class="achievers-content">
+                        <div class="results-grid">
+                            <div class="achiever-card">
+                                <img src="img/boy.jpg" alt="Student 5" class="achiever-img">
+                                <h4>Pasan Udana</h4>
+                                <p class="school">WP/MT/ Meegahathenna M.M.V</p>
+                                <p class="index">Index: 30950180</p>
+                                <div class="result-badge">A </div>
+                            </div>
+                            <div class="achiever-card">
+                                <img src="img/boy.jpg" alt="Student 5" class="achiever-img">
+                                <h4>Malindu Pehesara</h4>
+                                <p class="school">WP/MT/ Meegahathenna M.M.V</p>
+                                <p class="index">Index: 30949823</p>
+                                <div class="result-badge">A </div>
+                            </div>
+                            <div class="achiever-card">
+                                <img src="img/boy.jpg" alt="Student 5" class="achiever-img">
+                                <h4>Sithum Vihaga</h4>
+                                <p class="school">Ananda Sastralaya Mathugama</p>
+                                <p class="index">Index: 30949823</p>
+                                <div class="result-badge">B </div>
+                            </div>
+                            <div class="achiever-card">
+                                <img src="img/boy.jpg" alt="Student 5" class="achiever-img">
+                                <h4>Achintha Diluk</h4>
+                                <p class="school">Kannangara M.M.V</p>
+                                <p class="index">Index: 30909074</p>
+                                <div class="result-badge">B </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2022 Results -->
+                    <div id="achievers-2022" class="achievers-content">
+                        <div class="results-grid">
+                            <div class="achiever-card animate-on-scroll delay-1">
+                                <img src="img/girl.jpg" alt="Student 1" class="achiever-img">
+                                <h4>Kaneesha Kawindi</h4>
+                                <p class="school">WP/MT/Miriswatta/M.V</p>
+                                <p class="index">Index: 20991916</p>
+                                <div class="result-badge">A </div>
+                            </div>
+                            <div class="achiever-card animate-on-scroll delay-2">
+                                <img src="img/girl.jpg" alt="Student 2" class="achiever-img">
+                                <h4>Wishmi Sanjana</h4>
+                                <p class="school">WP/MT/Miriswatta/M.V</p>
+                                <p class="index">Index: 20991924</p>
+                                <div class="result-badge">A </div>
+                            </div>
+                            <div class="achiever-card animate-on-scroll delay-3">
+                                <img src="img/girl.jpg" alt="Student 2" class="achiever-img">
+                                <h4>Subani Akarshani</h4>
+                                <p class="school">WP/MT/Miriswatta/M.V</p>
+                                <p class="index">Index: 20992246</p>
+                                <div class="result-badge">A </div>
+                            </div>
+                            <div class="achiever-card animate-on-scroll delay-4">
+                                <img src="img/boy.jpg" alt="Student 2" class="achiever-img">
+                                <h4>Hassith Dulanjana</h4>
+                                <p class="school">WP/MT/Miriswatta/M.V</p>
+                                <p class="index">Index: 20991894</p>
+                                <div class="result-badge">A </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </section>
+
+            <!-- 4. About Section (Light bg) -->
+            <section id="about" class="scroll-section light">
+                <div class="container">
+                    <h2 class="section-title animate-on-scroll">About <span class="highlight">MJ ICT</span></h2>
+
+                    <div class="about-grid">
+                        <!-- Left: Teacher Details Column -->
+                        <div class="teacher-details-col animate-on-scroll delay-1">
+                            <h3>Miyuru Jayasinghe</h3>
+                            <p><strong><i class="fas fa-graduation-cap highlight"></i> Qualifications:</strong></p>
+                            <ul>
+                                <li>Peason BTEC HND in Computing</li>
+                                <li>B.Sc (Hons) Computer SCience</li>
+                            </ul>
+                            <p class="bio">
+                                <align="justify"> I pursued my education in the Advanced Level (A/L) Technology stream
+                                    and
+                                    completed my degree at NSBM Green University and ESOFT Metro Campus.
+                                    With over 3 years of experience in the field of supportive teaching, I am a
+                                    dedicated educator who focuses more on practical knowledge rather than just theory.
+                                    I am passionate about sharing real-world knowledge with students and helping to
+                                    develop their intelligence and critical thinking skills for the modern world..
+                            </p>
+                            </align>
+                        </div>
+
+                        <!-- Right: Teacher Photo Column -->
+                        <div class="teacher-photo-col animate-on-scroll delay-2">
+                            <img src="img/Teacher.JPG" alt="Miyuru Jayasinghe">
+                        </div>
+                    </div>
+
+                    <!-- Class Institutes Row -->
+                    <h3 class="section-subtitle animate-on-scroll text-center" style="margin-top: 50px;">Our <span
+                            class="highlight">Class Locations</span></h3>
+                    <div class="institutes-grid animate-on-scroll delay-1">
+
+                        <div class="institute-card">
+                            <i class="fas fa-school institute-icon"></i>
+                            <h4>Sisora</h4>
+                            <p>Mathugama</p>
+                            <!-- Hover Timetable popup -->
+                            <div class="institute-timetable">
+                                <table>
+                                    <tr>
+                                        <th>Day</th>
+                                        <th>Time</th>
+                                        <th>Grade</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Saturday</td>
+                                        <td>12 Pm </td>
+                                        <td>Grade 10</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Saturday</td>
+                                        <td>10 Am</td>
+                                        <td>Grade 11</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="institute-card">
+                            <i class="fas fa-school institute-icon"></i>
+                            <h4>Layara</h4>
+                            <p>Meeghathenna</p>
+                            <div class="institute-timetable">
+                                <table>
+                                    <tr>
+                                        <th>Day</th>
+                                        <th>Time</th>
+                                        <th>Grade</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Sunday</td>
+                                        <td>3 Pm</td>
+                                        <td>Grade 6-9</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sunday</td>
+                                        <td>1 Pm</td>
+                                        <td>Grade 10</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sunday</td>
+                                        <td>8 Am</td>
+                                        <td>Grade 11</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="institute-card">
+                            <i class="fas fa-school institute-icon"></i>
+                            <h4>Layara</h4>
+                            <p>Pelawatta</p>
+                            <div class="institute-timetable">
+                                <table>
+                                    <tr>
+                                        <th>Day</th>
+                                        <th>Time</th>
+                                        <th>Grade</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Sunday</td>
+                                        <td>8 Pm</td>
+                                        <td>Grade 10</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sunday</td>
+                                        <td>6 Pm</td>
+                                        <td>Grade 6-9</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="institute-card">
+                            <i class="fas fa-school institute-icon"></i>
+                            <h4>Jayamaga</h4>
+                            <p>Agalawatta</p>
+                            <div class="institute-timetable">
+                                <table>
+                                    <tr>
+                                        <th>Day</th>
+                                        <th>Time</th>
+                                        <th>Grade</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Saturday</td>
+                                        <td>2 Pm</td>
+                                        <td>Grade 6-9</td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="institute-card">
+                            <i class="fas fa-school institute-icon"></i>
+                            <h4>Infinity</h4>
+                            <p>Moragala</p>
+                            <div class="institute-timetable">
+                                <table>
+                                    <tr>
+                                        <th>Day</th>
+                                        <th>Time</th>
+                                        <th>Grade</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Saturday</td>
+                                        <td>3 Pm</td>
+                                        <td>Grade 6</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Friday</td>
+                                        <td> 7 Pm</td>
+                                        <td>Grade 7</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Friday</td>
+                                        <td> 5 Pm</td>
+                                        <td>Grade 8</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Friday</td>
+                                        <td> 3 Pm</td>
+                                        <td>Grade 9</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Saturday</td>
+                                        <td> 5 Pm</td>
+                                        <td>Grade 10 Group (I)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sunday</td>
+                                        <td> 10 Am</td>
+                                        <td>Grade 10 Group (II)</td>
+                                    </tr>
+
+
+
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Flyer Carousel Section -->
+                    <h3 class="section-subtitle animate-on-scroll text-center" style="margin-top: 80px;">Class <span
+                            class="highlight">Flyers & Promotions</span></h3>
+                    <div class="flyers-slider-wrapper animate-on-scroll delay-1">
+                        <button class="slider-btn prev flyers-nav" onclick="moveFlyers(-1)"><i
+                                class="fas fa-chevron-left"></i></button>
+                        <button class="slider-btn next flyers-nav" onclick="moveFlyers(1)"><i
+                                class="fas fa-chevron-right"></i></button>
+                        <div class="flyers-grid" id="flyers-grid">
+                            <div class="flyer-card">
+                                <img src="img/class poster (1).jpg" alt="Flyer 1" class="flyer-img"
+                                    onclick="openLightbox('img/01.JPG')">
+                                <div class="flyer-info">
+
+                                </div>
+                            </div>
+                            <div class="flyer-card">
+                                <img src="img/g9 to g10.jpg" alt="Flyer 2" class="flyer-img"
+                                    onclick="openLightbox('img/02.JPG')">
+                                <div class="flyer-info">
+
+                                </div>
+                            </div>
+                            <div class="flyer-card">
+                                <img src="img/Programming G11 U1.jpg" alt="Flyer 3" class="flyer-img"
+                                    onclick="openLightbox('img/03.JPG')">
+                                <div class="flyer-info">
+
+                                </div>
+                            </div>
+                            <div class="flyer-card">
+                                <img src="img/ict tute back 3.jpg" alt="Flyer 4" class="flyer-img"
+                                    onclick="openLightbox('img/04.JPG')">
+                                <div class="flyer-info">
+
+                                </div>
+                            </div>
+                            <div class="flyer-card">
+                                <img src="img/result 20241.jpg" alt="Flyer 5" class="flyer-img"
+                                    onclick="openLightbox('img/05.JPG')">
+                                <div class="flyer-info">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. Contact Section (Dark bg) -->
+            <section id="contact" class="scroll-section dark">
+                <div class="container text-center">
+                    <h2 class="section-title animate-on-scroll"><span class="highlight">Contact</span> Us</h2>
+                    <p class="contact-desc animate-on-scroll">Get in touch through our official social media channels.
+                        .</p>
+
+                    <div class="social-circles-grid animate-on-scroll delay-1">
+                        <a href="https://www.facebook.com/MjICTedu/" target="_blank" class="social-circle fb"><i
+                                class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.youtube.com/@MJICT" target="_blank" class="social-circle yt"><i
+                                class="fab fa-youtube"></i></a>
+
+                        <!-- Highlighted WhatsApp -->
+                        <a href="https://wa.me/94768895962" target="_blank" class="social-circle wa highlight-wa">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+
+                        <a href="https://www.tiktok.com/@miyurujayasinghe" target="_blank" class="social-circle tt"><i
+                                class="fab fa-tiktok"></i></a>
+                        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=mjictedu@gmail.com" target="_blank"
+                            class="social-circle em"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Minimized Footer -->
+            <footer class="mini-footer">
+                <div class="container footer-content-mini">
+                    <div class="footer-left">
+                        <div class="logo" style="cursor:pointer;" onclick="scrollToSection('home')">
+                            <span class="m-blue">MJ</span> <span class="m-white">ICT</span>
+                        </div>
+                    </div>
+                    <div class="footer-center">
+                        <ul class="mini-nav">
+                            <li><a href="#" onclick="scrollToSection('home')">Home</a></li>
+                            <li><a href="#" onclick="scrollToSection('gallery')">Gallery</a></li>
+                            <li><a href="#" onclick="scrollToSection('feedback')">Feedback</a></li>
+                            <li><a href="#" onclick="scrollToSection('about')">About</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <center>
+                    <div class="copyright"></div>
+                    <p>©2026 MJ ICT. All rights reserved. Design and Develop by Miyuru jayasinghe</p>
+                </center>
+            </footer>
+        </div> <!-- End Public View -->
+
+
+        <!-- 7. Student Panel (Hidden until login) -->
+        <section id="panel" class="page-section dark">
+            <div class="container dashboard-layout">
+
+                <!-- Dashboard Sidebar -->
+                <div class="dash-sidebar animate-on-scroll">
+                    <div class="panel-header" style="margin-bottom: 20px;">
+                        <h2>Student <br><span class="highlight">Dashboard</span></h2>
+                    </div>
+
+                    <!-- Dashboard Language Switcher Explicit Tabs -->
+                    <div class="lang-tab-group notranslate"
+                        style="margin-bottom: 20px; justify-content: space-between;">
+                        <button class="lang-tab-btn active lang-opt-en" onclick="changeLang('en')">English</button>
+                        <button class="lang-tab-btn lang-opt-si" onclick="changeLang('si')">Sinhala</button>
+                        <button class="lang-tab-btn lang-opt-ta" onclick="changeLang('ta')">Tamil</button>
+                    </div>
+
+                    <div class="dash-menu">
+                        <button class="dash-tab active" onclick="showDashTab('profile-view')"><i
+                                class="fas fa-user"></i> Profile</button>
+                        <button class="dash-tab" onclick="showDashTab('exam-view')"><i class="fas fa-book"></i>
+                            Exam</button>
+                    </div>
+                    <button class="btn-secondary block logout-btn" style="margin-top:auto;" onclick="logout()"><i
+                            class="fas fa-sign-out-alt"></i> Logout</button>
+                </div>
+
+                <!-- Dashboard Main Content Area -->
+                <div class="dash-main animate-on-scroll delay-1">
+                    <!-- Profile View -->
+                    <div id="profile-view" class="dash-content active">
+                        <div class="profile-card split-layout">
+                            <!-- Left: Details -->
+                            <div class="profile-info-side">
+                                <h3 style="margin-bottom: 15px;">Student Information</h3>
+                                <div class="profile-details-list">
+                                    <div class="detail-row"><i class="fas fa-id-card"></i> <span
+                                            class="label">Name:</span> <strong id="profile-name">--</strong></div>
+                                    <div class="detail-row"><i class="fas fa-envelope"></i> <span
+                                            class="label">Email:</span> <strong id="profile-email">--</strong></div>
+                                    <div class="detail-row"><i class="fas fa-venus-mars"></i> <span
+                                            class="label">Gender:</span> <strong id="profile-gender">--</strong></div>
+                                    <div class="detail-row"><i class="fas fa-graduation-cap"></i> <span
+                                            class="label">Grade:</span> <strong id="profile-grade">--</strong></div>
+                                </div>
+                                <span class="profile-badge" style="margin-top: 20px; display:inline-block;"
+                                    id="profile-grade-badge">Grade --</span>
+                            </div>
+                            <!-- Right: Photo -->
+                            <div class="profile-photo-side">
+                                <div class="profile-photo-wrap large">
+                                    <img id="profile-photo" src="https://i.pravatar.cc/150?img=3" alt="Profile Photo"
+                                        class="profile-photo-img">
+                                    <label for="photo-upload" class="photo-upload-btn"><i
+                                            class="fas fa-camera"></i></label>
+                                    <input type="file" id="photo-upload" accept="image/*"
+                                        onchange="handlePhotoUpload(event)" style="display:none;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Exam View -->
+                    <div id="exam-view" class="dash-content">
+                        <!-- Unified Exam Setup -->
+                        <div id="exam-setup" class="panel-view active">
+                            <h3 class="animate-on-scroll">Select Grade & Term to Begin</h3>
+
+                            <!-- Grade Selection -->
+                            <div class="grade-section mt-4 animate-on-scroll delay-1">
+                                <h4 style="color: var(--text-muted); margin-bottom: 15px;">1. Select Your Grade</h4>
+                                <div class="grade-grid" id="grade-grid-container">
+                                    <button class="grade-card" onclick="selectGradeInline(6, this)">Grade 6</button>
+                                    <button class="grade-card" onclick="selectGradeInline(7, this)">Grade 7</button>
+                                    <button class="grade-card" onclick="selectGradeInline(8, this)">Grade 8</button>
+                                    <button class="grade-card" onclick="selectGradeInline(9, this)">Grade 9</button>
+                                    <button class="grade-card" onclick="selectGradeInline(10, this)">Grade 10</button>
+                                    <button class="grade-card" onclick="selectGradeInline(11, this)">Grade 11</button>
+                                </div>
+                            </div>
+
+                            <!-- Term Selection -->
+                            <div class="term-section mt-5" id="term-section-container"
+                                style="display: none; opacity: 0; transition: 0.4s;">
+                                <h4 style="color: var(--text-muted); margin-bottom: 15px;">2. Select Term for Grade
+                                    <span id="display-grade-inline" class="highlight"></span>
+                                </h4>
+                                <div class="term-grid">
+                                    <button class="term-card" onclick="selectTermInline(1, this)">1st Term Exam</button>
+                                    <button class="term-card" onclick="selectTermInline(2, this)">2nd Term Exam</button>
+                                    <button class="term-card" onclick="selectTermInline(3, this)">3rd Term Exam</button>
+                                </div>
+                            </div>
+
+                            <!-- Start Exam Button -->
+                            <div id="start-btn-container" class="mt-5"
+                                style="display: none; opacity: 0; transition: 0.4s; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 30px;">
+                                <h4 style="margin-bottom: 20px;">Ready for <span class="highlight">Grade <span
+                                            id="start-grade-display"></span> - Term <span
+                                            id="start-term-display"></span></span> Exam</h4>
+                                <p style="color: var(--text-muted); margin-bottom: 20px;">
+                                    <i class="fas fa-info-circle text-neon"></i> The <strong style="color:white;">40
+                                        minute</strong> timer will begin immediately.
+                                </p>
+                                <button class="btn-primary" style="font-size: 1.2rem; padding: 15px 40px;"
+                                    onclick="beginExamSession()">Start Exam</button>
+                            </div>
+                        </div>
+
+                        <!-- Fullscreen Exam Portal -->
+                        <div id="exam-portal" class="fullscreen-overlay" style="display: none;">
+                            <div class="exam-workspace-full">
+                                <!-- Clean Top Navbar -->
+                                <div class="exam-top-bar">
+                                    <button class="back-btn-master" onclick="exitExam()"><i
+                                            class="fas fa-arrow-left"></i> Exit</button>
+                                    <div class="timer large-timer">
+                                        <i class="fas fa-clock"></i> <span id="time-left">40:00</span>
+                                    </div>
+                                    <button type="button" class="btn-secondary"
+                                        onclick="document.getElementById('quiz-form').dispatchEvent(new Event('submit'))">Submit</button>
+                                </div>
+
+                                <!-- Side Panel for Question Grid -->
+                                <div class="exam-nav-sidebar"
+                                    style="background:#13141f; position:absolute; left:0; top:80px; bottom:0; padding:20px; overflow-y:auto; border-right:1px solid rgba(255,255,255,0.05); z-index:10;">
+                                    <h4
+                                        style="margin-bottom: 20px; font-size: 1.1rem; color: var(--neon-blue); text-align:center;">
+                                        Question Navigator</h4>
+                                    <div id="question-nav-grid" class="question-nav">
+                                        <!-- Nav buttons injected here -->
+                                    </div>
+                                </div>
+
+                                <div class="exam-content-area" style="margin-left:260px; padding:20px 0;">
+                                    <!-- Side Nav: Previous -->
+                                    <button class="side-nav-arrow left-arrow" id="side-prev"
+                                        onclick="changeQuestion(-1)"
+                                        style="position:fixed; left: 260px; top:50%; transform:translateY(-50%); z-index:5;"><i
+                                            class="fas fa-chevron-left"></i></button>
+
+                                    <!-- Main Exam Card -->
+                                    <div class="exam-main-center"
+                                        style="max-width: 800px; margin: 0 auto; background: var(--bg-card); padding: 40px; border-radius: 12px;">
+                                        <form id="quiz-form" onsubmit="submitExam(event)">
+                                            <div id="questions-container" class="paginated-questions">
+                                                <!-- Questions inject here -->
+                                            </div>
+                                            <!-- Standard submit fallback -->
+                                            <button type="submit" class="btn-primary" id="btn-final-submit"
+                                                style="display:none; background: #2ecc71; margin-top:30px; padding: 15px 40px; font-size: 1.2rem; width: 100%;">Complete
+                                                Exam</button>
+                                        </form>
+                                    </div>
+
+                                    <!-- Side Nav: Next -->
+                                    <button class="side-nav-arrow right-arrow" id="side-next"
+                                        onclick="changeQuestion(1)"
+                                        style="position:fixed; right: 0; top:50%; transform:translateY(-50%); z-index:5;"><i
+                                            class="fas fa-chevron-right"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Exam Results -->
+                        <div id="exam-results" class="panel-view">
+                            <div class="result-card lg-card"
+                                style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column;">
+                                <h3>Exam Submitted</h3>
+                                <div class="score-circle mt-3 notranslate" style="margin: 0 auto;">
+                                    <span id="final-score"
+                                        style="font-size: 60px; font-weight: 800; color: white;">0%</span>
+                                </div>
+                                <div class="stats mt-4 mb-4" style="justify-content: center; display: flex; gap: 30px;">
+                                    <div class="stat"><i class="fas fa-check text-green"></i> Correct: <strong
+                                            id="correct-count">0</strong></div>
+                                    <div class="stat"><i class="fas fa-times text-red"></i> Wrong: <strong
+                                            id="wrong-count">0</strong></div>
+                                </div>
+
+                                <h4 class="mt-4 mb-3"
+                                    style="text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                                    Review Answers</h4>
+                                <div id="detailed-results" class="detailed-results-list"
+                                    style="text-align:left; max-height: 400px; overflow-y: auto; background: var(--bg-hover); padding: 15px; border-radius: 8px;">
+                                    <!-- Injected detailed results -->
+                                </div>
+
+                                <button class="btn-primary mt-4" style="align-self: center;"
+                                    onclick="showPanel('grade-selection')">Back to Dashboard</button>
+                            </div>
+                            <!-- End Exam Results -->
+                        </div><!-- End Exam View -->
+
+                    </div><!-- End Dashboard Main -->
+                </div>
+        </section>
+
+    </main>
+
+    <!-- Minimized Footer -->
+
+    <!-- Hide Google Translate Default Widget properly without display:none -->
+    <div id="google_translate_element"
+        style="position:absolute; width:1px; height:1px; overflow:hidden; visibility:hidden; left:-9999px;"></div>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'en,si,ta', autoDisplay: false }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript"
+        src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>

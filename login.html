@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - MJ ICT Student Portal</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: var(--bg-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
+        
+        /* Animated Background Elements */
+        .bg-glow {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0, 123, 255, 0.15) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+            z-index: 10;
+        }
+
+        .auth-card {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7);
+            position: relative;
+        }
+        
+        .auth-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--neon-blue));
+            border-radius: 20px 20px 0 0;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 25px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .back-link:hover {
+            color: var(--neon-blue);
+            transform: translateX(-5px);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .auth-header h2 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .auth-header p {
+            color: var(--text-muted);
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        /* Form Steps */
+        .auth-step {
+            display: none;
+            animation: slideIn 0.4s ease forwards;
+        }
+
+        .auth-step.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Inputs */
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 0 15px;
+            transition: all 0.3s;
+        }
+
+        .input-wrapper:focus-within {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.15);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .input-wrapper i {
+            color: var(--text-muted);
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .input-wrapper input, .input-wrapper select {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 15px 10px;
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+        
+        .input-wrapper select option {
+            background: var(--bg-tertiary);
+            color: white;
+        }
+        
+        .phone-prefix {
+            color: var(--neon-blue);
+            padding-right: 12px;
+            margin-right: 12px;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            font-weight: 800;
+            font-size: 16px;
+        }
+
+        /* OTP Styling */
+        .otp-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .otp-input {
+            width: 55px;
+            height: 65px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 800;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--neon-blue);
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .otp-input:focus {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .btn-full {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            margin-top: 10px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Toast Notification */
+        #toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--bg-tertiary);
+            border-left: 4px solid var(--neon-blue);
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transform: translateX(150%);
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        #toast.show {
+            transform: translateX(0);
+        }
+        
+        #toast i {
+            font-size: 22px;
+            color: var(--neon-blue);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+
+    <div id="toast">
+        <i class="fas fa-comment-dots"></i>
+        <div>
+            <h4 style="margin:0; font-size:15px;">Message</h4>
+            <p id="toast-msg" style="margin:5px 0 0 0; font-size:14px; color:white; font-weight: 300;"></p>
+        </div>
+    </div>
+
+    <div class="login-wrapper">
+        <div class="auth-card">
+            <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Main Site</a>
+            
+            <div class="auth-header">
+                <h2>Student <span class="highlight">Login</span></h2>
+                <p id="step-desc">Enter your phone number to continue</p>
+            </div>
+
+            <!-- Step 1: Phone Number -->
+            <div id="step-1" class="auth-step active">
+                <div class="input-group">
+                    <label>Mobile Number</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-mobile-alt"></i>
+                        <span class="phone-prefix">+94</span>
+                        <input type="tel" id="phone-input" placeholder="7X XXX XXXX" maxlength="10" autocomplete="off" autofocus>
+                    </div>
+                    <small style="color:var(--text-muted); font-size:13px; margin-top:8px; display:block;">
+                        <i class="fas fa-shield-alt text-green"></i> We will send a 4-digit OTP to verify your identity.
+                    </small>
+                </div>
+                <button class="btn-primary btn-full" onclick="sendOTP()">
+                    Send OTP <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+
+            <!-- Step 2: OTP Verification -->
+            <div id="step-2" class="auth-step">
+                <div class="input-group">
+                    <label style="text-align:center; font-size: 15px; line-height:1.6;">
+                        Enter the 4-digit OTP sent to <br>
+                        <b id="display-phone" style="color:var(--neon-blue); font-size:18px;"></b>
+                    </label>
+                    <div class="otp-container mt-5">
+                        <input type="text" class="otp-input" maxlength="1" onkeyup="moveToNext(this, event)">
+                        <input type="text" class="otp-input" maxlength="1" onkeyup="moveToNext(this, event)">
+                        <input type="text" class="otp-input" maxlength="1" onkeyup="moveToNext(this, event)">
+                        <input type="text" class="otp-input" maxlength="1" onkeyup="moveToNext(this, event)">
+                    </div>
+                    <div style="text-align:center; margin-top:15px;">
+                        <a href="#" onclick="resendOTP()" style="color:var(--text-muted); font-size:14px; text-decoration: underline;">Didn't receive code? Resend</a>
+                    </div>
+                </div>
+                <button class="btn-primary btn-full" onclick="verifyOTP()">
+                    Verify & Proceed <i class="fas fa-check-circle"></i>
+                </button>
+            </div>
+
+            <!-- Step 3: Registration or Login Password -->
+            <div id="step-3" class="auth-step">
+                
+                <div id="registration-fields" style="display:none;">
+                    <div class="input-group">
+                        <label>Your Full Name</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="reg-name" placeholder="E.g. Nimal Perera">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Select Grade</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-graduation-cap"></i>
+                            <select id="reg-grade">
+                                <option value="" disabled selected>Select Grade</option>
+                                <option value="6">Grade 6</option>
+                                <option value="7">Grade 7</option>
+                                <option value="8">Grade 8</option>
+                                <option value="9">Grade 9</option>
+                                <option value="10">Grade 10</option>
+                                <option value="11">Grade 11</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label id="pwd-label">Password</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="reg-password" placeholder="••••••••">
+                        <i class="fas fa-eye" style="cursor:pointer;" onclick="togglePassword(this)"></i>
+                    </div>
+                </div>
+                
+                <button class="btn-primary btn-full" id="final-btn" onclick="completeAuth()">
+                    Continue <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Translate script not technically needed here but can be added if wanted -->
+    <script src="login.js"></script>
+</body>
+</html>
